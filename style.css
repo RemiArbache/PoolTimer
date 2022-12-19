@@ -1,0 +1,116 @@
+* {
+    margin: 0;
+    padding: 0;
+    background-color: #696969;
+    align-items: center;
+    color: rgb(207, 207, 207);
+}
+
+/* fit size to device */
+html {
+    width: 100vw;
+    height: 100vh;
+}
+
+
+.player{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+body {
+    display: flex;
+    align-content: space-around;
+    flex-direction: column;
+    width: auto;
+    height: auto;
+    font-family: 'Poppins', sans-serif;
+}
+
+button{
+    width: 100px;
+    height: 50px;
+    border-radius: 0;
+    margin: 10px;
+    border: none;
+    background-color: #57575c;
+    font-size: 20px;
+    font-weight: 600;
+    color: rgb(207, 207, 207);
+    cursor: pointer;
+    transition: 0.5s;
+}
+button:hover{
+    background-color: #000;
+    color: #fff;
+}
+
+#player1{
+    transform: rotate(180deg);
+}
+
+.active{
+    background-color: darkgoldenrod;
+}
+
+
+
+.active > h2{
+    background-color: darkgoldenrod;
+}
+
+.timer{
+    font-size: 50px;
+    font-weight: 600;
+    color: #000;
+    padding: 20px;
+}
+
+#settings-popup{
+    width: 60%;
+    border: 2px solid #57575c;
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    flex:1;
+    padding: 15px 0;
+    transition: 0s;
+    display: none;
+}
+
+#settings-popup > h1{
+    padding-bottom: 25px;
+}
+
+.settings-buttons{
+    display: flex;
+    flex-direction: row
+    
+}
+
+input{
+    width: 100px;
+    height: 50px;
+    border-radius: 0;
+    margin: 10px;
+    border: none;
+    background-color: #57575c;
+    font-size: 20px;
+    font-weight: 600;
+    color: rgb(207, 207, 207);
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.buttons{
+    flex-direction: row;
+    padding: 40px 0;
+    justify-content: center;
+}

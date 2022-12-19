@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!--Player 1 timer -->
+    <div class="player" id="player1">
+        <div class="timer">
+            <h2 id="timer1">00:00</h2>
+        </div>
+        <div class="player1 buttons">
+            <button id="add-time1">Pot</button>
+            <button id="remove-time1">Foul</button>
+        </div>
+    </div>
+    <div class="buttons">
+        <button id="play-pause">Pause</button>
+        <button id="settings-button">Settings</button>
+        <button id="reset">Reset</button>
+    </div>
+
+    <div id="settings-popup">
+        <h1>Settings</h1>
+        <label for="Time">Time</label>
+        <input type="number" name="Time">
+        <label for="Increment">Increment</label>
+        <input type="number" name="Increment">
+        <label for="Penalty">Penalty</label>
+        <input type="number" name="Penalty">
+
+        <div class="settings-buttons">
+            <button id="cancel-button">Cancel</button>
+            <button id="save-button">Save</button>
+        </div>
+    </div>
+
+    <!-- Player 2 timer -->
+    <div class="player" id="player2">
+        <div class="timer">
+            <h2 id="timer2">00:00</h2>
+        </div>
+        <div class="player2 buttons">
+            <button id="add-time">Pot</button>
+            <button id="remove-time">Foul</button>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
