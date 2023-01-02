@@ -8,46 +8,41 @@
 </head>
 <body>
     <!--Player 1 timer -->
-    <div class="player" id="player1">
-        <div class="timer">
-            <h2 id="timer1">00:00</h2>
-        </div>
-        <div class="player1 buttons">
-            <button id="add-time1">Pot</button>
-            <button id="remove-time1">Foul</button>
+    <div class="upside-down player player1" id="player1">
+        <div class="timer player1">
+            <h2 class="player1" id="timer1">00:00</h2>
         </div>
     </div>
+
     <div class="buttons">
-        <button id="play-pause">Pause</button>
-        <button id="settings-button">Settings</button>
-        <button id="reset">Reset</button>
+        <button  id="pot-button">Pot</button>
+        <button onclick="toggleSettings()" id="settings-button">Settings</button>
+        <button onclick="resetTimers()" id="reset-button">Reset</button>
+        <button id="foul-button">Foul</button>
     </div>
 
     <div id="settings-popup">
         <h1>Settings</h1>
         <label for="Time">Time</label>
-        <input type="number" name="Time">
+        <input value="2.5" placeholder="2.5" step="0.1" id="time" type="number" name="Time">
         <label for="Increment">Increment</label>
-        <input type="number" name="Increment">
+        <input value="3" placeholder="3" value="3" step="0.5" id="increment" type="number" name="Increment">
         <label for="Penalty">Penalty</label>
-        <input type="number" name="Penalty">
+        <input value="5" placeholder="5" value="5" step="0.5" id="decrement" type="number" name="Penalty">
 
         <div class="settings-buttons">
-            <button id="cancel-button">Cancel</button>
-            <button id="save-button">Save</button>
+            <button onclick="toggleSettings()" id="cancel-button">Cancel</button>
+            <button onclick="saveAndCloseSettings()" id="save-button">Save</button>
         </div>
     </div>
 
     <!-- Player 2 timer -->
-    <div class="player" id="player2">
-        <div class="timer">
-            <h2 id="timer2">00:00</h2>
-        </div>
-        <div class="player2 buttons">
-            <button id="add-time">Pot</button>
-            <button id="remove-time">Foul</button>
+    <div class="player player2" id="player2">
+        <div class="timer player2">
+            <h2 class="player2" id="timer2">00:00</h2>
         </div>
     </div>
+
     <script src="app.js"></script>
 </body>
 </html>
