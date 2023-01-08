@@ -6,6 +6,13 @@ const State = {
     FOUL : 4,
 }
 
+const COOKIES = {
+    TIME : 'time',
+    INCREMENT : 'increment',
+    DECREMENT : 'decrement',
+}
+
+
 class Timer {
     constructor(time, increment, decrement, timerElement) {
         this._time = time;
@@ -13,7 +20,6 @@ class Timer {
         this.decrement = decrement;
         this.timerElement = timerElement;
         this.timerParent = timerElement.closest('.player');
-        this.timerParent.addEventListener('click', this.toggle);
         this.interval = null;
         this.state = State.IDLE;
         this.reset();
@@ -72,6 +78,7 @@ class Timer {
         this.timerParent.classList.remove('lost');
         this.timerParent.classList.remove('active');
         this.timerParent.classList.remove('foul');
+        this.timerParent.classList.remove('paused');
         this.time = TIME;
         this.state = State.IDLE;
         this.increment = INCREMENT;
@@ -84,9 +91,9 @@ class TimerController {
         this.timer1 = timer1;
         this.timer2 = timer2;
         this.potButton = document.getElementById('pot-button');
-        this.potButton.addEventListener('click', this.pot);
+        this.potButton.addEventListener('click', e => this.pot(e));
         this.foulButton = document.getElementById('foul-button');
-        this.foulButton.addEventListener('click', this.foul);
+        this.foulButton.addEventListener('click', e => this.foul(e));
         this.clickedTimer = null;
         this.otherTimer = null;
         this.timer1Button = this.timer1.timerParent;
@@ -96,6 +103,14 @@ class TimerController {
     }
 
     pauseTimers() {
+        if(this.timer1.state === State.ACTIVE) {
+            this.timer1.state = State.PAUSED;
+            this.timer1.timerParent.classList.add('paused');
+        }
+        if(this.timer2.state === State.ACTIVE) {
+            this.timer2.state = State.PAUSED;
+            this.timer2.timerParent.classList.add('paused');
+        }
         this.timer1.stop();
         this.timer2.stop();
     }
@@ -106,7 +121,6 @@ class TimerController {
     }
 
     toggleTimer = (event) => {
-        console.log(this);
         let clickedTimer, otherTimer;
         if (event.target.classList.contains('player1')) {
             clickedTimer = this.timer1;
@@ -115,10 +129,15 @@ class TimerController {
             clickedTimer = this.timer2;
             otherTimer = this.timer1;
         }
+        
         switch (clickedTimer.state) {
             case State.IDLE:
             case State.ACTIVE:
-                clickedTimer.state = State.PAUSED;
+                clickedTimer.state = State.IDLE;
+                
+                clickedTimer.timerParent.classList.remove('paused');
+                otherTimer.timerParent.classList.remove('paused');
+                
                 clickedTimer.stop();
                 otherTimer.start();
                 break;
@@ -135,8 +154,8 @@ class TimerController {
         }
     }
 
-    pot = () => {
-
+    pot = (e) => {
+        e.preventDefault();
         if (this.timer1.state === State.ACTIVE) {
             this.timer1.pot();
         } else if (this.timer2.state === State.ACTIVE) {
@@ -144,7 +163,8 @@ class TimerController {
         }
     }
 
-    foul = () => {
+    foul = (e) => {
+        e.preventDefault();
         if (this.timer1.state === State.ACTIVE) {
             this.fouledTimer = this.timer1;
             this.otherTimer = this.timer2;
@@ -163,21 +183,28 @@ class TimerController {
 
 }
 
-const DEFAULT_TIME = 15 * 1000;
-const DEFAULT_INCREMENT = 3 * 1000;
+
+const DEFAULT_TIME = 102 * 1000;
+const DEFAULT_INCREMENT = 5 * 1000;
 const DEFAULT_DECREMENT = 5 * 1000;
-let TIME = DEFAULT_TIME;
-let DECREMENT = DEFAULT_DECREMENT;
-let INCREMENT = DEFAULT_INCREMENT;
+let TIME = getCookie(COOKIES.TIME) || DEFAULT_TIME;
+let DECREMENT = getCookie(COOKIES.DECREMENT) || DEFAULT_DECREMENT;
+let INCREMENT = getCookie(COOKIES.INCREMENT) || DEFAULT_INCREMENT;
 const timer1 = document.getElementById('timer1');
 const timer2 = document.getElementById('timer2');
 const settingsPane = document.getElementById('settings-popup');
+const settingsBackground = document.getElementById('settings-background');
 const startStopButton = document.getElementById('start-stop-button');
 
 timerObject1 = new Timer(TIME, INCREMENT, DECREMENT, timer1);
 timerObject2 = new Timer(TIME, INCREMENT, DECREMENT, timer2);
 
 timerController = new TimerController(timerObject1, timerObject2);
+
+settingsBackground.addEventListener('click', e => {
+    e.preventDefault();
+    toggleSettings();
+});
 
 
 // center settings popup vertically
@@ -203,8 +230,17 @@ function foul(){
 }
 
 function toggleSettings() {
+    if(settingsPane.style.display == "none"){
+        document.getElementById('time').value = TIME / 1000 / 60;
+        document.getElementById('increment').value = INCREMENT / 1000;
+        document.getElementById('decrement').value = DECREMENT / 1000;
+        timerController.pauseTimers();
+    }
+    else{
+    }
     settingsPane.style.display =
         settingsPane.style.display != "none" ? 'none' : "flex";
+    settingsBackground.style.display = settingsPane.style.display;
 }
 
 function saveAndCloseSettings() {
@@ -222,8 +258,12 @@ function saveAndCloseSettings() {
     timerObject1.reset();
     timerObject2.reset();
 
+    // set cookie
+    saveCookies();
+
     // close settings
     settingsPane.style.display = 'none';
+    settingsBackground.style.display = 'none';
 }
 
 function formatTime(time) {
@@ -235,4 +275,15 @@ function formatTime(time) {
         return `${seconds}.${hundredths < 10 ? '0' : ''}${hundredths}`;
     }    
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+}
+
+// save settings to cookie
+function saveCookies(){
+    document.cookie = `${COOKIES.TIME}=${TIME};${COOKIES.INCREMENT}=${INCREMENT};${COOKIES.DECREMENT}=${DECREMENT}`;
+}
+
+
+function getCookie(name){
+    const cookie = document.cookie.split(';').find(c => c.includes(name));
+    return cookie ? cookie.split('=')[1] : null;
 }
